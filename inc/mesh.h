@@ -6,29 +6,15 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <learnopengl/shader.h>
+#include "shader.h"
 
 #include <string>
 #include <vector>
 using namespace std;
 
-#define MAX_BONE_INFLUENCE 4
-
 struct Vertex {
     // position
     glm::vec3 Position;
-    // normal
-    glm::vec3 Normal;
-    // texCoords
-    glm::vec2 TexCoords;
-    // tangent
-    glm::vec3 Tangent;
-    // bitangent
-    glm::vec3 Bitangent;
-	//bone indexes which will influence this vertex
-	int m_BoneIDs[MAX_BONE_INFLUENCE];
-	//weights from each bone
-	float m_Weights[MAX_BONE_INFLUENCE];
 };
 
 struct Texture {
@@ -39,11 +25,8 @@ struct Texture {
 
 class Mesh {
 public:
-    // mesh Data
-    vector<Vertex>       vertices;
-    vector<unsigned int> indices;
-    vector<Texture>      textures;
-    unsigned int VAO;
+    // default constructor
+    Mesh() = default;
 
     // constructor
     Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures)
@@ -94,7 +77,22 @@ public:
         glActiveTexture(GL_TEXTURE0);
     }
 
+    /*void updateMesh()*/
+
+    // Deallocate memory
+    void Delete()
+    {
+        glDeleteVertexArrays(1, &VAO);
+        glDeleteBuffers(1, &VBO);
+        glDeleteBuffers(1, &EBO);
+    }
+
 private:
+    // mesh Data
+    vector<Vertex>       vertices;
+    vector<unsigned int> indices;
+    vector<Texture>      textures;
+    unsigned int VAO;
     // render data 
     unsigned int VBO, EBO;
 
@@ -118,28 +116,10 @@ private:
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
         // set the vertex attribute pointers
-        // vertex Positions
-        glEnableVertexAttribArray(0);	
+        // vertex Positions	
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-        // vertex normals
-        glEnableVertexAttribArray(1);	
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-        // vertex texture coords
-        glEnableVertexAttribArray(2);	
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
-        // vertex tangent
-        glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
-        // vertex bitangent
-        glEnableVertexAttribArray(4);
-        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
-		// ids
-		glEnableVertexAttribArray(5);
-		glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, m_BoneIDs));
+        glEnableVertexAttribArray(0);
 
-		// weights
-		glEnableVertexAttribArray(6);
-		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, m_Weights));
         glBindVertexArray(0);
     }
 };
