@@ -15,6 +15,11 @@ using namespace std;
 struct Vertex {
     // position
     glm::vec3 Position;
+
+    Vertex()
+    {
+        Position = glm::vec3(0.0f);
+    }
 };
 
 struct Texture {
