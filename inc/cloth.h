@@ -12,7 +12,7 @@
 
 #define g glm::vec3(0.0f, -9.8f, 0.0f)
 #define damping 0.99f
-#define iteration 64
+#define iteration 32
 
 typedef glm::vec3 Normal;
 typedef glm::vec3 Velocity;
@@ -106,7 +106,7 @@ public:
 	// update the cloth
 	void update(float deltaTime)
 	{
-		dt = deltaTime * 0.1f;
+		dt = deltaTime;
 		for (unsigned int i = 0; i < vertices.size(); i++)
 		{
 			if (i == 0 || i == (rows - 1) * cols)

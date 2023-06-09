@@ -78,7 +78,7 @@ int main()
 
 	// get a cloth object
 	// ------------------------------------------------------------------
-	Cloth cloth(100, 100);
+	Cloth cloth(20, 20);
 
 	// set wire as plot mode
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
