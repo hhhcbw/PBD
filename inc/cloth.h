@@ -10,7 +10,12 @@
 
 #include <vector>
 
+#define g glm::vec3(0.0f, -9.8f, 0.0f)
+
 typedef glm::vec3 Normal;
+typedef glm::vec3 Velocity;
+typedef glm::vec3 Acceleration;
+typedef glm::vec3 Force;
 
 class Cloth{
 public:
@@ -25,11 +30,12 @@ public:
 			{
 				Vertex v;
 				v.Position.x = (float)i / (float)rows - 0.5f;
-				v.Position.z = 0.0f;
-				v.Position.y = (float)j / (float)cols - 0.5f;
+				v.Position.y = 0.0f;
+				v.Position.z = (float)j / (float)cols - 0.5f;
 				vertices.push_back(v);
+				vels.push_back({ 0.0f, 0.0f, 0.0f });
+				//forces.push_back({ 0.0f, 0.0f, 0.0f });
 			}
-
 		vector<unsigned int> indices;
 		for(unsigned int i = 0; i < rows - 1; i++)
 			for (unsigned int j = 0; j < cols - 1; j++)
@@ -56,6 +62,19 @@ public:
 		mesh.Draw(shader);
 	}
 
+	// update the cloth
+	void update(float deltaTime)
+	{
+		float dt = deltaTime * 0.1f;
+		for (unsigned int i = 0; i < vertices.size(); i++)
+		{
+			vels[i] = vels[i] + g * dt;
+			vertices[i].Position = vertices[i].Position + vels[i] * dt;
+		}
+		// update mesh
+		mesh.updateVertices(vertices);
+	}
+
 	~Cloth()
 	{
 		mesh.Delete();
@@ -64,6 +83,8 @@ public:
 private:
 	// cloth data
 	vector<Vertex> vertices;
+	vector<Velocity> vels;
+	//vector<Force> forces;
 	vector<Normal> normals;
 	Mesh mesh;
 };

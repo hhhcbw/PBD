@@ -117,6 +117,9 @@ int main()
 		//glm::mat4 model = glm::mat4(1.0f);
 		//colorShader.setMat4("model", model);
 
+		// update the cloth, calculate new vertices' velocity, positon and collision
+		cloth.update(deltaTime);
+
 		// render the cloth
 		cloth.Draw(colorShader);
 
