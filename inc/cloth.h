@@ -50,7 +50,7 @@ public:
 	// no default constructor
 	Cloth() = delete;
 	
-	// constructior
+	// constructor
 	Cloth(unsigned int rows, unsigned int cols)
 	{
 		this->rows = rows;

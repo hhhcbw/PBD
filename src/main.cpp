@@ -7,6 +7,7 @@
 
 #include "shader.h"
 #include "cloth.h"
+#include "sphere.h"
 
 #include <iostream>
 
@@ -65,9 +66,13 @@ int main()
 	// ------------------------------------
 	Shader colorShader("colors.vs", "colors.fs");
 
-	// get a cloth object
+	// create a cloth object
 	// ------------------------------------------------------------------
 	Cloth cloth(20, 20);
+
+	// create a sphere object
+	// ------------------------------------------------------------------
+	Sphere sphere(0.2f);
 
 	// set wire as plot mode
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -111,6 +116,9 @@ int main()
 
 		// render the cloth
 		cloth.Draw(colorShader);
+
+		// render the sphere
+		sphere.Draw(colorShader);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
