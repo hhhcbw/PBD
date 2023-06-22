@@ -12,7 +12,7 @@
 
 #define g glm::vec3(0.0f, -9.8f, 0.0f)
 #define damping 0.99f
-#define iteration 32
+#define iteration 32 // more iterations more stiffness
 
 typedef glm::vec3 Normal;
 typedef glm::vec3 Velocity;
@@ -48,10 +48,10 @@ struct Edge
 class Cloth{
 public:
 	// no default constructor
-	Cloth() = delete;
+	Cloth() = default;
 	
 	// constructor
-	Cloth(unsigned int rows, unsigned int cols)
+	Cloth(unsigned int rows, unsigned int cols) // greater resolution less stiffness
 	{
 		this->rows = rows;
 		this->cols = cols;

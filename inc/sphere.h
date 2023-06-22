@@ -19,7 +19,7 @@
 class Sphere {
 public:
 	// no default constructor
-	Sphere() = delete;
+	Sphere() = default;
 
 	// constructor
 	Sphere(float radius) : radius(radius), origin(glm::vec3()) 
@@ -36,6 +36,20 @@ public:
 	void Draw(Shader& shader)
 	{
 		mesh.Draw(shader);
+	}
+
+	// update the sphere according to the direction
+	void update(glm::vec3 dir)
+	{
+		origin += dir;
+		for (unsigned int i = 0; i < rows; i++)
+			for (unsigned int j = 0; j < cols; j++)
+			{
+				float theta = j * 2.0f * PI / cols;
+				float phi = i * 1.0f * PI / rows;
+				vertices[i * cols + j].Position += dir;
+			}
+		mesh.updateVertices(vertices);
 	}
 
 	~Sphere()
@@ -63,6 +77,7 @@ private:
 				v.Position.y = radius * sin(theta) * sin(phi);
 				v.Position.z = radius * cos(phi);
 				
+				v.Position += origin;
 				vertices.push_back(v);
 			}
 		vector<unsigned int> indices;
