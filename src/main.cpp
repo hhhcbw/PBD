@@ -164,7 +164,7 @@ int main()
 		colorShader.setMat4("model", model);
 
 		// update the cloth, calculate new vertices' velocity, positon and collision
-		cloth->update(deltaTime);
+		cloth->update(deltaTime, sphere);
 
 		// set wire as plot mode
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

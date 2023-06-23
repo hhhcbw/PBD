@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "mesh.h"
+#include "sphere.h"
 
 #include <vector>
 
@@ -104,7 +105,7 @@ public:
 	}
 
 	// update the cloth
-	void update(float deltaTime)
+	void update(float deltaTime, Sphere* sphere)
 	{
 		dt = deltaTime;
 		for (unsigned int i = 0; i < vertices.size(); i++)
@@ -117,6 +118,7 @@ public:
 		}
 		for (unsigned int i = 0; i < iteration; i++)
 			pbdConstraint();
+		handleCollision(sphere);
 		// update mesh
 		mesh.updateVertices(vertices);
 	}
@@ -215,6 +217,22 @@ private:
 				continue;
 			vels[i] = vels[i] + (1.0f / dt) * ((0.2f * vertices[i].Position + pos_sum[i]) / (0.2f + (float)cnt[i]) - vertices[i].Position);
 			vertices[i].Position = (0.2f * vertices[i].Position + pos_sum[i]) / (0.2f + (float)cnt[i]);
+		}
+	}
+
+	void handleCollision(Sphere* sphere)
+	{
+		glm::vec3 origin = sphere->getOrigin();
+		float radius = sphere->getRadius();
+		for (unsigned int i = 0; i < vertices.size(); i++)
+		{
+			glm::vec3 pos = vertices[i].Position;
+			glm::vec3 origin2pos = pos - origin;
+			if (glm::length(origin2pos) < radius)
+			{
+				vertices[i].Position = origin + glm::normalize(origin2pos) * radius;
+				vels[i] = vels[i] + (1.0f / dt) * (vertices[i].Position - pos);
+			}
 		}
 	}
 };
